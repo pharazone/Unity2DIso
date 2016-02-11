@@ -14,16 +14,16 @@ public class Position : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Application.isEditor && !Application.isPlaying) {
-			Debug.Log ("Should never be seen in game made.");
-			var newX = 0f;
-			var newY = 0f;
-			var newZ = 0f;
+			Debug.Log ("Should never be seen in game mode.");
+			var newX = 0.0f;
+			var newY = 0.0f;
+			var newZ = 0.0f;
 			
-			newX = (x - y)/2f;
-			newY = (x + y) / -4f;
+			newX = (x - y) / 2.0f;
+			newY = (x + y) / -4.0f;
 			newZ = newY;
 			if (elevation != 0) {
-				newY = newY + elevation / 4f;
+				newY = newY + elevation / 4.0f;
 			}
 			
 			
