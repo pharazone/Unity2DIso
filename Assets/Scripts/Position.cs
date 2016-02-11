@@ -24,6 +24,7 @@ public class Position : MonoBehaviour {
 			newZ = newY;
 			if (elevation != 0) {
 				newY = newY + elevation / 4.0f;
+				newZ = newZ - elevation / 8.0f;
 			}
 			
 			
