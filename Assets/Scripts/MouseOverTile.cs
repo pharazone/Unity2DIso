@@ -38,6 +38,13 @@ public class MouseOverTile : MonoBehaviour {
 		border.GetComponent<Renderer>().enabled = false;
 		//borderRend.enabled = false;
 	}
+	
+	void OnMouseDown() {
+		var posScript = GetComponent<Position>();
+		if (posScript != null) {
+			Debug.Log ("Clicked tile in position " + posScript.x + ", " + posScript.y);
+		}
+	}
 
 	// Update is called once per frame
 	void Update () {
