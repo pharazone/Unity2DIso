@@ -42,19 +42,8 @@ public class MouseOverTile : MonoBehaviour {
 	void OnMouseDown() {
 		var posScript = GetComponent<Position>();
 		if (posScript != null) {
+			GameManager.Instance.setTileClicked (gameObject);
 			Debug.Log ("Clicked tile in position " + posScript.x + ", " + posScript.y);
-			
-			// Might not be the right spot to put this code, might be best suited in a PlayerController.
-			GameObject player = GameObject.Find("AnimatedSprite");
-			if (player != null) {
-				Animator pAnimator = player.GetComponent<Animator>();
-				if (pAnimator.GetInteger("PlayerAction") == 1) {
-					pAnimator.SetInteger("PlayerAction", 0);
-				} else {
-					pAnimator.SetInteger("PlayerAction", 1);
-				}
-				
-			}
 		}
 	}
 

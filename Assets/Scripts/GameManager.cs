@@ -3,13 +3,24 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	public static GameManager Instance { get; private set; }
+	private GameObject tileClicked;
+
+	void Awake () {
+		if (Instance != null && Instance != this) {
+			Destroy (gameObject);
+		}
+
+		Instance = this;
+
+		DontDestroyOnLoad (gameObject);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public GameObject getTileClicked() {
+		return tileClicked;
+	}
+
+	public void setTileClicked(GameObject tile) {
+		tileClicked = tile;
 	}
 }
