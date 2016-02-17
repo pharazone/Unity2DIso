@@ -48,11 +48,21 @@ public class MouseOverTile : MonoBehaviour {
 		border.GetComponent<Renderer>().enabled = true;
 	}
 
-	void OnMouseOver() {
-
-	}
-
 	void OnMouseExit(){
+		removeIndicators();
+		pathSet = false;
+	}
+	
+	void OnMouseDown() {
+		var tile = GetComponent<Tile>();
+		if (tile != null) {
+			GameManager.Instance.setTileClicked (gameObject);
+			Debug.Log ("Clicked tile in position " + tile.x + ", " + tile.y);
+			removeIndicators();
+		}
+	}
+	
+	void removeIndicators() {
 		//creating an array of all the cloned borders by finding the unique tag
 		GameObject[] borders = GameObject.FindGameObjectsWithTag("clone");
 		//disabling render and destroying them (not sure why I have to disable render but it doesnt work otherwise)
@@ -64,18 +74,6 @@ public class MouseOverTile : MonoBehaviour {
 		//main border object gets repositioned and rendering turned off
 		border.GetComponent<Transform>().position = new Vector3 (0f,-1f,50f);
 		border.GetComponent<Renderer>().enabled = false;
-
-
-		pathSet = false;
-
-	}
-	
-	void OnMouseDown() {
-		var tile = GetComponent<Tile>();
-		if (tile != null) {
-			GameManager.Instance.setTileClicked (gameObject);
-			Debug.Log ("Clicked tile in position " + tile.x + ", " + tile.y);
-		}
 	}
 	
 	List<Tile> GetAdjacentTiles(Tile t) {

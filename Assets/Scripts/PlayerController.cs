@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		var tile = GetComponent<Tile>();
+		currentTile = GetComponent<Tile>();
 	}
 	
 	// Update is called once per frame
@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour {
 				newPos, speed * Time.deltaTime);
 			if (transform.position == newPos) {
 				GetComponent<Animator>().SetInteger("PlayerAction", 0);
+				GetComponent<Tile>().x = tc.GetComponent<Tile>().x;
+				GetComponent<Tile>().y = tc.GetComponent<Tile>().y;
+				GetComponent<Tile>().elevation = tc.GetComponent<Tile>().elevation;
 				GameManager.Instance.setTileClicked (null);
 			}
 		}

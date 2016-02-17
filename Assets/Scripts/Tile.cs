@@ -5,10 +5,11 @@ using System.Collections;
 public class Tile : MonoBehaviour {
 
 	public int x, y, elevation;
+	GameObject border;
 
 	// Use this for initialization
 	void Start () {
-		
+		GameObject.Find("Border");
 	}
 
 	// Update is called once per frame
