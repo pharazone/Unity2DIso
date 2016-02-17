@@ -4,10 +4,11 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
 	public float speed = 1.0f;
+	public Tile currentTile;
 
 	// Use this for initialization
 	void Start () {
-	
+		var tile = GetComponent<Tile>();
 	}
 	
 	// Update is called once per frame

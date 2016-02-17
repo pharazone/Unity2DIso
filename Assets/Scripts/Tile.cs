@@ -2,7 +2,7 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class Position : MonoBehaviour {
+public class Tile : MonoBehaviour {
 
 	public float x, y, elevation;
 	

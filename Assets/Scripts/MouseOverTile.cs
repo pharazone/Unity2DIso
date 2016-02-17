@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MouseOverTile : MonoBehaviour {
 
 	private Renderer rend;
 	private Transform trans;
 	private GameObject border;
+	private bool pathSet = false;
+	private List<Tile> openTiles;
+	private List<Tile> closedTiles;
+	
 	// Use this for initialization
 	void Start () {
 
@@ -28,7 +33,16 @@ public class MouseOverTile : MonoBehaviour {
 	}
 
 	void OnMouseOver() {
-		//rend.material.color -= new Color (0.1F, 0, 0) * Time.deltaTime;
+		// We only want to show the path on mouse hover. And only once. So reset this bool when mouse exits.
+		if (!pathSet) {
+			// Get the player's tile so we can calculate shortest path to mouse tile.
+			var pTile = GameObject.Find ("AnimatedSprite").GetComponent<Tile>();
+			var mTile = GetComponent<Tile>();
+			Debug.Log ("Player is on tile " + pTile.x + ", " + pTile.y);
+			Debug.Log ("Mouse is on tile " + mTile.x + ", " + mTile.y);
+			List<Tile> adjTiles = GetAdjacentTiles(pTile);
+			pathSet = true;
+		}
 		border.GetComponent<Renderer>().enabled = true;
 	}
 
@@ -36,15 +50,22 @@ public class MouseOverTile : MonoBehaviour {
 		//rend.material.color = Color.white;
 		border.GetComponent<Transform>().position = new Vector3 (0f,-1f,50f);
 		border.GetComponent<Renderer>().enabled = false;
+		pathSet = false;
 		//borderRend.enabled = false;
 	}
 	
 	void OnMouseDown() {
-		var posScript = GetComponent<Position>();
-		if (posScript != null) {
+		var tile = GetComponent<Tile>();
+		if (tile != null) {
 			GameManager.Instance.setTileClicked (gameObject);
-			Debug.Log ("Clicked tile in position " + posScript.x + ", " + posScript.y);
+			Debug.Log ("Clicked tile in position " + tile.x + ", " + tile.y);
 		}
+	}
+	
+	List<Tile> GetAdjacentTiles(Tile t) {
+		List<Tile> adjTiles = new List<Tile>();
+		
+		return adjTiles;
 	}
 
 	// Update is called once per frame
