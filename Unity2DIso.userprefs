@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MouseOverTile.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerController.cs">
     <Files>
-      <File FileName="Assets/Scripts/Tile.cs" Line="12" Column="29" />
-      <File FileName="Assets/Scripts/PlayerController.cs" Line="25" Column="4" />
-      <File FileName="Assets/Scripts/GameManager.cs" Line="18" Column="3" />
-      <File FileName="Assets/Scripts/MouseOverTile.cs" Line="10" Column="31" />
+      <File FileName="Assets/Scripts/MouseOverTile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tile.cs" Line="22" Column="4" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="28" Column="56" />
+      <File FileName="Assets/Scripts/GameManager.cs" Line="1" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

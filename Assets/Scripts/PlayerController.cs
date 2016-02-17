@@ -16,8 +16,14 @@ public class PlayerController : MonoBehaviour {
 		GameObject tc = GameManager.Instance.getTileClicked ();
 		if (tc != null) {
 			GetComponent<Animator>().SetInteger("PlayerAction", 1);
-			var newZ = tc.transform.position.y - 1 / 8.0f;
-			var newY = tc.transform.position.y + 1 / 4.0f;
+			GetComponent<Tile>().elevation = tc.GetComponent<Tile>().elevation + 1;
+			var newX = (tc.GetComponent<Tile>().x - tc.GetComponent<Tile>().y) / 2.0f;
+			var newY = (tc.GetComponent<Tile>().x + tc.GetComponent<Tile>().y) / -4.0f;
+			var newZ = newY;
+			if (GetComponent<Tile>().elevation != 0) {
+				newY = newY + GetComponent<Tile>().elevation / 4.0f;
+				newZ = newZ - GetComponent<Tile>().elevation / 8.0f;
+			}
 			Debug.Log ("Tile was clicked. Moving to " + tc.transform.position.x + ", " + tc.transform.position.y);
 			var newPos = new Vector3 (tc.transform.position.x, newY, newZ);
 			transform.position = Vector3.MoveTowards(transform.position, 
@@ -26,7 +32,6 @@ public class PlayerController : MonoBehaviour {
 				GetComponent<Animator>().SetInteger("PlayerAction", 0);
 				GetComponent<Tile>().x = tc.GetComponent<Tile>().x;
 				GetComponent<Tile>().y = tc.GetComponent<Tile>().y;
-				GetComponent<Tile>().elevation = tc.GetComponent<Tile>().elevation;
 				GameManager.Instance.setTileClicked (null);
 			}
 		}
