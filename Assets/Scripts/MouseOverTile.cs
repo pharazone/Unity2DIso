@@ -41,15 +41,24 @@ public class MouseOverTile : MonoBehaviour {
 			Debug.Log ("Player is on tile " + pTile.x + ", " + pTile.y);
 			Debug.Log ("Mouse is on tile " + mTile.x + ", " + mTile.y);
 			List<Tile> adjTiles = GetAdjacentTiles(pTile);
+			foreach (Tile t in adjTiles) {
+				var gObj = t.GetComponent<Transform>();
+				Instantiate(border, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity);
+			}
 			pathSet = true;
 		}
 		border.GetComponent<Renderer>().enabled = true;
 	}
 
 	void OnMouseExit(){
+		GameObject[] borders = GameObject.FindGameObjectsWithTag("Indicator");
+		
+		foreach (GameObject b in borders) {
+			b.GetComponent<Transform>().position = new Vector3 (0f,-1f,50f);
+			b.GetComponent<Renderer>().enabled = false;
+		}
 		//rend.material.color = Color.white;
-		border.GetComponent<Transform>().position = new Vector3 (0f,-1f,50f);
-		border.GetComponent<Renderer>().enabled = false;
+		
 		pathSet = false;
 		//borderRend.enabled = false;
 	}
@@ -64,6 +73,31 @@ public class MouseOverTile : MonoBehaviour {
 	
 	List<Tile> GetAdjacentTiles(Tile t) {
 		List<Tile> adjTiles = new List<Tile>();
+		
+		Tile top = GameManager.Instance.getTileAt(t.x, t.y + 1);
+		Tile bot = GameManager.Instance.getTileAt(t.x, t.y - 1);
+		Tile left = GameManager.Instance.getTileAt(t.x + 1, t.y);
+		Tile right = GameManager.Instance.getTileAt(t.x - 1, t.y);
+		
+		if (top != null) {
+			Debug.Log ("Found adjacent tile at " + top.x + ", " + top.y);
+			adjTiles.Add(top);
+		}
+		
+		if (bot != null) {
+			Debug.Log ("Foud adjacent tile at " + bot.x + ", " + bot.y);
+			adjTiles.Add (bot);
+		}
+		
+		if (left != null) {
+			Debug.Log ("Found adjacent tile at " + left.x + ", " + left.y);
+			adjTiles.Add (left);
+		}
+		
+		if (right != null) {
+			Debug.Log ("Found adjacent tile at " + right.x + ", " + right.y);
+			adjTiles.Add(right);
+		}
 		
 		return adjTiles;
 	}

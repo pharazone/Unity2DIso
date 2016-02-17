@@ -4,17 +4,16 @@ using System.Collections;
 [ExecuteInEditMode]
 public class Tile : MonoBehaviour {
 
-	public float x, y, elevation;
-	
+	public int x, y, elevation;
+
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if (Application.isEditor && !Application.isPlaying) {
-			Debug.Log ("Should never be seen in game mode.");
 			var newX = 0.0f;
 			var newY = 0.0f;
 			var newZ = 0.0f;
