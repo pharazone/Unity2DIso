@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		currentTile = GetComponent<Tile>();
+		var tileObj = GetComponent<Tile>();
+		currentTile = GameManager.Instance.getTileAt(tileObj.x, tileObj.y);
 	}
 	
 	// Update is called once per frame
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour {
 				newY = newY + GetComponent<Tile>().elevation / 4.0f;
 				newZ = newZ - GetComponent<Tile>().elevation / 8.0f;
 			}
-			Debug.Log ("Tile was clicked. Moving to " + tc.transform.position.x + ", " + tc.transform.position.y);
+			//Debug.Log ("Tile was clicked. Moving to " + tc.transform.position.x + ", " + tc.transform.position.y);
 			var newPos = new Vector3 (tc.transform.position.x, newY, newZ);
 			transform.position = Vector3.MoveTowards(transform.position, 
 				newPos, speed * Time.deltaTime);
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour {
 				GetComponent<Animator>().SetInteger("PlayerAction", 0);
 				GetComponent<Tile>().x = tc.GetComponent<Tile>().x;
 				GetComponent<Tile>().y = tc.GetComponent<Tile>().y;
+				currentTile = GameManager.Instance.getTileAt(tc.GetComponent<Tile>().x, tc.GetComponent<Tile>().y);
 				GameManager.Instance.setTileClicked (null);
 			}
 		}

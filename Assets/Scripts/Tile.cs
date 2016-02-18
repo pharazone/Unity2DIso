@@ -31,4 +31,26 @@ public class Tile : MonoBehaviour {
 			transform.position = new Vector3 (newX, newY, newZ);
 		}
 	}
+	
+	public override bool Equals(System.Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		
+		Tile t = obj as Tile;
+		
+		if ((System.Object)t == null) {
+			return false;
+		}
+		
+		return t.x == x && t.y == y;
+	}
+	
+	public bool Equals(Tile t) {
+		if ((object)t == null) {
+			return false;
+		}
+		
+		return t.x == x && t.y == y;
+	}
 }

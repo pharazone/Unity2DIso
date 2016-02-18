@@ -33,8 +33,13 @@ public class MouseOverTile : MonoBehaviour {
 		// We only want to show the path on mouse hover. And only once. So reset this bool when mouse exits.
 		if (!pathSet) {
 			// Get the player's tile so we can calculate shortest path to mouse tile.
-			var pTile = GameObject.Find ("AnimatedSprite").GetComponent<Tile>();
+			var pTile = GameObject.Find ("AnimatedSprite").GetComponent<PlayerController>().currentTile;
 			var mTile = GetComponent<Tile>();
+			
+			if (pTile == mTile) {
+				pathSet = true;
+				return;
+			}
 			
 			InsertInOpenSteps(new ShortestPathStep(pTile));
 			do {
@@ -65,7 +70,7 @@ public class MouseOverTile : MonoBehaviour {
 					shortestPath.Clear();
 					return;
 				}
-				Debug.Log("Current step: " + currentStep);
+
 				List<Tile> adjTiles = GameManager.Instance.GetAdjacentTiles(currentStep.position);
 				
 				foreach (Tile t in adjTiles) {
