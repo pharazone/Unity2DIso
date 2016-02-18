@@ -29,7 +29,63 @@ public class MouseOverTile : MonoBehaviour {
 
 		border.GetComponent<Transform>().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
 
+		ShowMoveTiles();
+		
+		border.GetComponent<Renderer>().enabled = true;
+	}
 
+	void OnMouseExit(){
+		removeIndicators();
+		pathSet = false;
+	}
+	
+	void OnMouseDown() {
+		var tile = GetComponent<Tile>();
+		if (tile != null) {
+			GameManager.Instance.setTileClicked (gameObject);
+			removeIndicators();
+		}
+	}
+	
+	void ShowMoveTiles() {
+		int range = GameObject.Find ("AnimatedSprite").GetComponent<Unit>().moveDistance;
+		
+		int xTile = GameObject.Find ("AnimatedSprite").GetComponent<PlayerController>().currentTile.x;
+		int yTile = GameObject.Find ("AnimatedSprite").GetComponent<PlayerController>().currentTile.y;
+		
+		yTile += range + 1;
+		int offset = 1;
+		int z = 1;
+		bool shrinking = false;
+		for ( int i = 0; i <= range * 2; i++ ) {
+			xTile -= offset;
+			yTile--;
+			for ( int j = 0; j < z; j++ ) {
+				xTile++;
+				
+				Tile t = GameManager.Instance.getTileAt(xTile, yTile);
+				if (t != null) {
+					var clonedBorder = Instantiate (border, new Vector3(t.GetComponent<Transform>().position.x, t.GetComponent<Transform>().position.y, t.GetComponent<Transform>().position.z - 0.1f), Quaternion.identity) as GameObject;
+					clonedBorder.tag = "clone";
+					clonedBorder.GetComponent<Renderer>().enabled = true;
+				}
+				
+			}
+			
+			xTile = GameObject.Find ("AnimatedSprite").GetComponent<PlayerController>().currentTile.x;
+			
+			if ( offset > range || shrinking ) {
+				shrinking = true;
+				offset--;
+				z -= 2;
+			} else {
+				offset++;
+				z += 2;
+			}
+		}
+	}
+	
+	void ShowShortestPath() {
 		// We only want to show the path on mouse hover. And only once. So reset this bool when mouse exits.
 		if (!pathSet) {
 			// Get the player's tile so we can calculate shortest path to mouse tile.
@@ -70,7 +126,7 @@ public class MouseOverTile : MonoBehaviour {
 					shortestPath.Clear();
 					return;
 				}
-
+				
 				List<Tile> adjTiles = GameManager.Instance.GetAdjacentTiles(currentStep.position);
 				
 				foreach (Tile t in adjTiles) {
@@ -86,7 +142,7 @@ public class MouseOverTile : MonoBehaviour {
 					if (inClosed) {
 						continue;
 					}
-
+					
 					int moveCost = CostToMove(currentStep, step);
 					
 					bool inOpen = false;
@@ -105,11 +161,11 @@ public class MouseOverTile : MonoBehaviour {
 					}
 				}
 			} while (openSteps.Count > 0);
-
+			
 			if (shortestPath.Count == 0) {
 				Debug.Log("Could not find a path.");
 			}
-
+			
 			openSteps.Clear();
 			closedSteps.Clear();
 			shortestPath.Clear();
@@ -123,20 +179,6 @@ public class MouseOverTile : MonoBehaviour {
 				clonedBorder.GetComponent<Renderer>().enabled = true;
 			}*/
 			pathSet = true;
-		}
-		border.GetComponent<Renderer>().enabled = true;
-	}
-
-	void OnMouseExit(){
-		removeIndicators();
-		pathSet = false;
-	}
-	
-	void OnMouseDown() {
-		var tile = GetComponent<Tile>();
-		if (tile != null) {
-			GameManager.Instance.setTileClicked (gameObject);
-			removeIndicators();
 		}
 	}
 	
