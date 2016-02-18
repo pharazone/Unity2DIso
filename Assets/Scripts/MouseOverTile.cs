@@ -8,15 +8,18 @@ public class MouseOverTile : MonoBehaviour {
 	private Transform trans;
 	private GameObject border;
 	private bool pathSet = false;
-	private List<Tile> openTiles;
-	private List<Tile> closedTiles;
+	private List<ShortestPathStep> openSteps;
+	private List<ShortestPathStep> closedSteps;
+	private List<ShortestPathStep> shortestPath;
 
 	
 	// Use this for initialization
 	void Start () {
 		// not sure if we need this
 		rend = GetComponent<Renderer> ();
-
+		openSteps = new List<ShortestPathStep>();
+		closedSteps = new List<ShortestPathStep>();
+		shortestPath = new List<ShortestPathStep>();
 	}
 
 	void OnMouseEnter(){
@@ -32,17 +35,89 @@ public class MouseOverTile : MonoBehaviour {
 			// Get the player's tile so we can calculate shortest path to mouse tile.
 			var pTile = GameObject.Find ("AnimatedSprite").GetComponent<Tile>();
 			var mTile = GetComponent<Tile>();
-			Debug.Log ("Player is on tile " + pTile.x + ", " + pTile.y);
-			Debug.Log ("Mouse is on tile " + mTile.x + ", " + mTile.y);
-			List<Tile> adjTiles = GetAdjacentTiles(pTile);
+			
+			InsertInOpenSteps(new ShortestPathStep(pTile));
+			int i = 0;
+			do {
+				i++;
+				ShortestPathStep currentStep = openSteps[0];
+				
+				closedSteps.Add(currentStep);
+				
+				openSteps.RemoveAt(0);
+				
+				if (currentStep.position == mTile) {
+					do {
+						if (currentStep.parent != null) {
+							shortestPath.Add (currentStep);
+						}
+						currentStep = currentStep.parent;
+					} while (currentStep != null);
+					
+					foreach (ShortestPathStep sps in shortestPath) {
+						var gObj = sps.position.GetComponent<Transform>();
+						//storing the instantiate object as GameObject in clonedBorder and giving it a unique tag
+						var clonedBorder = Instantiate (border, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity) as GameObject;
+						clonedBorder.tag = "clone";
+						clonedBorder.GetComponent<Renderer>().enabled = true;
+					}
+					
+					openSteps.Clear();
+					closedSteps.Clear();
+					shortestPath.Clear();
+				}
+				
+				List<Tile> adjTiles = GameManager.Instance.GetAdjacentTiles(currentStep.position);
+				
+				foreach (Tile t in adjTiles) {
+					
+					ShortestPathStep step = new ShortestPathStep(t);
+					
+					bool inClosed = false;
+					foreach (ShortestPathStep cs in closedSteps) {
+						if (cs.position == step.position) {
+							inClosed = true;
+						}
+					}
+					if (inClosed) {
+						continue;
+					}
 
+					int moveCost = CostToMove(currentStep, step);
+					
+					bool inOpen = false;
+					foreach (ShortestPathStep os in openSteps) {
+						if (os.position == step.position) {
+							inOpen = true;
+						}
+					}
+					
+					if (!inOpen) {
+						step.parent = currentStep;
+						step.gScore = currentStep.gScore + moveCost;
+						step.hScore = ComputeHScore(step.position, mTile);
+						
+						InsertInOpenSteps(step);
+					}
+				}
+			} while (openSteps.Count > 0);
+
+			if (shortestPath.Count == 0) {
+				Debug.Log("Could not find a path.");
+			}
+
+			openSteps.Clear();
+			closedSteps.Clear();
+			shortestPath.Clear();
+			
+			/*
 			foreach (Tile t in adjTiles) {
 				var gObj = t.GetComponent<Transform>();
 				//storing the instantiate object as GameObject in clonedBorder and giving it a unique tag
 				var clonedBorder = Instantiate (border, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity) as GameObject;
 				clonedBorder.tag = "clone";
 				clonedBorder.GetComponent<Renderer>().enabled = true;
-			}
+			}*/
 			pathSet = true;
 		}
 		border.GetComponent<Renderer>().enabled = true;
@@ -57,9 +132,30 @@ public class MouseOverTile : MonoBehaviour {
 		var tile = GetComponent<Tile>();
 		if (tile != null) {
 			GameManager.Instance.setTileClicked (gameObject);
-			Debug.Log ("Clicked tile in position " + tile.x + ", " + tile.y);
 			removeIndicators();
 		}
+	}
+	
+	void InsertInOpenSteps(ShortestPathStep step) {
+		int stepFScore = step.Fscore();
+		int count = openSteps.Count;
+		int i = 0;
+
+		for (; i < count; i++) {
+			if (stepFScore < openSteps[i].Fscore()) {
+				break;
+			}
+		}
+
+		openSteps.Insert(i, step);
+	}
+	
+	int CostToMove(ShortestPathStep a, ShortestPathStep b) {
+		return 1;
+	}
+	
+	int ComputeHScore(Tile f, Tile t) {
+		return Mathf.Abs(t.x - f.x) + Mathf.Abs(t.y - f.y);
 	}
 	
 	void removeIndicators() {
@@ -76,36 +172,7 @@ public class MouseOverTile : MonoBehaviour {
 		border.GetComponent<Renderer>().enabled = false;
 	}
 	
-	List<Tile> GetAdjacentTiles(Tile t) {
-		List<Tile> adjTiles = new List<Tile>();
-		
-		Tile top = GameManager.Instance.getTileAt(t.x, t.y + 1);
-		Tile bot = GameManager.Instance.getTileAt(t.x, t.y - 1);
-		Tile left = GameManager.Instance.getTileAt(t.x + 1, t.y);
-		Tile right = GameManager.Instance.getTileAt(t.x - 1, t.y);
-		
-		if (top != null) {
-			Debug.Log ("Found adjacent tile at " + top.x + ", " + top.y);
-			adjTiles.Add(top);
-		}
-		
-		if (bot != null) {
-			Debug.Log ("Foud adjacent tile at " + bot.x + ", " + bot.y);
-			adjTiles.Add (bot);
-		}
-		
-		if (left != null) {
-			Debug.Log ("Found adjacent tile at " + left.x + ", " + left.y);
-			adjTiles.Add (left);
-		}
-		
-		if (right != null) {
-			Debug.Log ("Found adjacent tile at " + right.x + ", " + right.y);
-			adjTiles.Add(right);
-		}
-		
-		return adjTiles;
-	}
+	
 
 	// Update is called once per frame
 	void Update () {

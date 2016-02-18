@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour {
 		foreach (GameObject gTile in gTiles) {
 			Tile t = gTile.GetComponent<Tile>();
 			tiles.Add (t);
-			Debug.Log ("Found tile at " + t.x + ", " + t.y);
 		}
 
 		DontDestroyOnLoad (gameObject);
@@ -34,6 +33,37 @@ public class GameManager : MonoBehaviour {
 		}
 		
 		return null;
+	}
+	
+	public List<Tile> GetAdjacentTiles(Tile t) {
+		List<Tile> adjTiles = new List<Tile>();
+		
+		Tile top = getTileAt(t.x, t.y + 1);
+		Tile bot = getTileAt(t.x, t.y - 1);
+		Tile left = getTileAt(t.x + 1, t.y);
+		Tile right = getTileAt(t.x - 1, t.y);
+		
+		if (top != null) {
+			//Debug.Log ("Found adjacent tile at " + top.x + ", " + top.y);
+			adjTiles.Add(top);
+		}
+		
+		if (bot != null) {
+			//Debug.Log ("Foud adjacent tile at " + bot.x + ", " + bot.y);
+			adjTiles.Add (bot);
+		}
+		
+		if (left != null) {
+			//Debug.Log ("Found adjacent tile at " + left.x + ", " + left.y);
+			adjTiles.Add (left);
+		}
+		
+		if (right != null) {
+			//Debug.Log ("Found adjacent tile at " + right.x + ", " + right.y);
+			adjTiles.Add(right);
+		}
+		
+		return adjTiles;
 	}
 
 	public GameObject getTileClicked() {

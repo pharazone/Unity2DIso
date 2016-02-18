@@ -1,10 +1,12 @@
 ﻿public class ShortestPathStep {
 
-	int gScore;
-	int hScore;
-	ShortestPathStep parent;
+	public Tile position;
+	public int gScore;
+	public int hScore;
+	public ShortestPathStep parent;
 
-	public ShortestPathStep() {
+	public ShortestPathStep(Tile t) {
+		position = t;
 		gScore = 0;
 		hScore = 0;
 		parent = null;

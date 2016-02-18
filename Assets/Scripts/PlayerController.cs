@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 		if (tc != null) {
 			GetComponent<Animator>().SetInteger("PlayerAction", 1);
 			GetComponent<Tile>().elevation = tc.GetComponent<Tile>().elevation + 1;
-			var newX = (tc.GetComponent<Tile>().x - tc.GetComponent<Tile>().y) / 2.0f;
+			//var newX = (tc.GetComponent<Tile>().x - tc.GetComponent<Tile>().y) / 2.0f;
 			var newY = (tc.GetComponent<Tile>().x + tc.GetComponent<Tile>().y) / -4.0f;
 			var newZ = newY;
 			if (GetComponent<Tile>().elevation != 0) {
