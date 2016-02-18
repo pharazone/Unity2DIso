@@ -37,9 +37,7 @@ public class MouseOverTile : MonoBehaviour {
 			var mTile = GetComponent<Tile>();
 			
 			InsertInOpenSteps(new ShortestPathStep(pTile));
-			int i = 0;
 			do {
-				i++;
 				ShortestPathStep currentStep = openSteps[0];
 				
 				closedSteps.Add(currentStep);
@@ -65,8 +63,9 @@ public class MouseOverTile : MonoBehaviour {
 					openSteps.Clear();
 					closedSteps.Clear();
 					shortestPath.Clear();
+					return;
 				}
-				
+				Debug.Log("Current step: " + currentStep);
 				List<Tile> adjTiles = GameManager.Instance.GetAdjacentTiles(currentStep.position);
 				
 				foreach (Tile t in adjTiles) {
