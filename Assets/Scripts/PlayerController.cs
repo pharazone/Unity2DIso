@@ -44,6 +44,12 @@ public class PlayerController : MonoBehaviour {
 			transform.position = Vector3.MoveTowards (transform.position,
 				newPos, speed * Time.deltaTime);
 
+			if (moveTile.elevation > 0) {
+				animator.enabled = false;
+				animator.enabled = true;
+				animator.Play ("PlayerJumpingWest");
+			}
+
 			Debug.Log (GetComponent<Tile> ().x + ", " + GetComponent<Tile> ().y + " -> " + moveTile.x + ", " + moveTile.y);
 			if (GetComponent<Tile>().x > moveTile.x) {
 				if (direction != Direction.West) {
