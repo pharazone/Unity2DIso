@@ -4,9 +4,16 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
+	public enum PlayerState {
+		PLAYER_WALKING,
+		PLAYER_IDLE
+	}
+
+	public PlayerState playerState;
 	public static GameManager Instance { get; private set; }
 	private GameObject tileClicked;
 	public List<Tile> tiles;
+	public List<ShortestPathStep> shortestPath;
 
 	void Awake () {
 		if (Instance != null && Instance != this) {
@@ -21,6 +28,9 @@ public class GameManager : MonoBehaviour {
 			Tile t = gTile.GetComponent<Tile>();
 			tiles.Add (t);
 		}
+
+		playerState = PlayerState.PLAYER_IDLE;
+		shortestPath = new List<ShortestPathStep>();
 
 		DontDestroyOnLoad (gameObject);
 	}

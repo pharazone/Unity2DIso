@@ -10,32 +10,35 @@ public class MouseOverTile : MonoBehaviour {
 	private bool pathSet = false;
 	private List<ShortestPathStep> openSteps;
 	private List<ShortestPathStep> closedSteps;
-	private List<ShortestPathStep> shortestPath;
 
 	
 	// Use this for initialization
 	void Start () {
 		// not sure if we need this
 		rend = GetComponent<Renderer> ();
+		border = GameObject.Find ("border");
 		openSteps = new List<ShortestPathStep>();
 		closedSteps = new List<ShortestPathStep>();
-		shortestPath = new List<ShortestPathStep>();
 	}
 
 	void OnMouseEnter(){
-		trans = GetComponent<Transform> ();
+		if (GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_IDLE) {
+			
+			trans = GetComponent<Transform> ();
 
-		border = GameObject.Find ("border");
+			border.GetComponent<Transform> ().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
 
-		border.GetComponent<Transform>().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
-
-		ShowMoveTiles();
+			openSteps.Clear ();
+			closedSteps.Clear ();
+			GameManager.Instance.shortestPath.Clear ();
+			ShowShortestPath ();
 		
-		border.GetComponent<Renderer>().enabled = true;
+			border.GetComponent<Renderer> ().enabled = true;
+		}
 	}
 
 	void OnMouseExit(){
-		removeIndicators();
+		RemoveIndicators();
 		pathSet = false;
 	}
 	
@@ -43,8 +46,9 @@ public class MouseOverTile : MonoBehaviour {
 		var tile = GetComponent<Tile>();
 		if (tile != null) {
 			GameManager.Instance.setTileClicked (gameObject);
-			removeIndicators();
+			RemoveIndicators();
 		}
+		GameManager.Instance.playerState = GameManager.PlayerState.PLAYER_WALKING;
 	}
 	
 	void ShowMoveTiles() {
@@ -108,12 +112,12 @@ public class MouseOverTile : MonoBehaviour {
 				if (currentStep.position == mTile) {
 					do {
 						if (currentStep.parent != null) {
-							shortestPath.Add (currentStep);
+							GameManager.Instance.shortestPath.Add (currentStep);
 						}
 						currentStep = currentStep.parent;
 					} while (currentStep != null);
 					
-					foreach (ShortestPathStep sps in shortestPath) {
+					foreach (ShortestPathStep sps in GameManager.Instance.shortestPath) {
 						var gObj = sps.position.GetComponent<Transform>();
 						//storing the instantiate object as GameObject in clonedBorder and giving it a unique tag
 						var clonedBorder = Instantiate (border, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity) as GameObject;
@@ -123,7 +127,7 @@ public class MouseOverTile : MonoBehaviour {
 					
 					openSteps.Clear();
 					closedSteps.Clear();
-					shortestPath.Clear();
+					//shortestPath.Clear();
 					return;
 				}
 				
@@ -162,13 +166,13 @@ public class MouseOverTile : MonoBehaviour {
 				}
 			} while (openSteps.Count > 0);
 			
-			if (shortestPath.Count == 0) {
+			if (GameManager.Instance.shortestPath.Count == 0) {
 				Debug.Log("Could not find a path.");
 			}
 			
 			openSteps.Clear();
 			closedSteps.Clear();
-			shortestPath.Clear();
+			GameManager.Instance.shortestPath.Clear();
 			
 			/*
 			foreach (Tile t in adjTiles) {
@@ -204,7 +208,7 @@ public class MouseOverTile : MonoBehaviour {
 		return Mathf.Abs(t.x - f.x) + Mathf.Abs(t.y - f.y);
 	}
 	
-	void removeIndicators() {
+	void RemoveIndicators() {
 		//creating an array of all the cloned borders by finding the unique tag
 		GameObject[] borders = GameObject.FindGameObjectsWithTag("clone");
 		//disabling render and destroying them (not sure why I have to disable render but it doesnt work otherwise)
