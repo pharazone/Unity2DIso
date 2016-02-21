@@ -20,8 +20,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		var tileObj = GetComponent<Tile>();
-		currentTile = GameManager.Instance.getTileAt(tileObj.x, tileObj.y);
+		currentTile = GetComponent<Tile>();
 		animator = GetComponent<Animator> ();
 	}
 
@@ -53,7 +52,6 @@ public class PlayerController : MonoBehaviour {
 			Debug.Log (GetComponent<Tile> ().x + ", " + GetComponent<Tile> ().y + " -> " + moveTile.x + ", " + moveTile.y);
 			if (GetComponent<Tile>().x > moveTile.x) {
 				if (direction != Direction.West) {
-					animator.Play ("PlayerWalkingWest");
 					if (flipped) {
 						Vector3 theScale = transform.localScale;
 						theScale.x *= -1;
@@ -62,9 +60,9 @@ public class PlayerController : MonoBehaviour {
 					}
 					direction = Direction.West;
 				}
+				animator.Play ("PlayerWalkingWest");
 			} else if (GetComponent<Tile>().x < moveTile.x) {
 				if (direction != Direction.East) {
-					animator.Play ("PlayerWalkingSouth");
 					if (!flipped) {
 						Vector3 theScale = transform.localScale;
 						theScale.x *= -1;
@@ -73,9 +71,9 @@ public class PlayerController : MonoBehaviour {
 					}
 					direction = Direction.East;
 				}
+				animator.Play ("PlayerWalkingSouth");
 			} else if (GetComponent<Tile>().y < moveTile.y) {
 				if (direction != Direction.South) {
-					animator.Play ("PlayerWalkingSouth");
 					if (flipped) {
 						Vector3 theScale = transform.localScale;
 						theScale.x *= -1;
@@ -84,9 +82,9 @@ public class PlayerController : MonoBehaviour {
 					}
 					direction = Direction.South;
 				}
+				animator.Play ("PlayerWalkingSouth");
 			} else if (GetComponent<Tile>().y > moveTile.y) {
 				if (direction != Direction.North) {
-					animator.Play("PlayerWalkingWest");
 					if (!flipped) {
 						Vector3 theScale = transform.localScale;
 						theScale.x *= -1;
@@ -95,6 +93,7 @@ public class PlayerController : MonoBehaviour {
 					}
 					direction = Direction.North;
 				}
+				animator.Play("PlayerWalkingWest");
 			}
 
 			if (transform.position != newPos) {
@@ -105,9 +104,6 @@ public class PlayerController : MonoBehaviour {
 				GetComponent<Tile> ().y = moveTile.y;
 				GameManager.Instance.shortestPath.RemoveAt (GameManager.Instance.shortestPath.Count - 1);
 			}
-
-			currentTile = moveTile;
-
 		} else {
 			GameManager.Instance.playerState = GameManager.PlayerState.PLAYER_IDLE;
 		}
