@@ -120,7 +120,35 @@ public class PlayerController : MonoBehaviour {
 			StartCoroutine (Walk ());
 		} else {
 			GameManager.Instance.playerState = GameManager.PlayerState.PLAYER_IDLE;
-			animator.Play ("PlayerIdleWest");
+			Vector3 theScale = transform.localScale;
+			switch (direction) {
+				case Direction.East:
+					if (!flipped) {
+						theScale.x *= -1;
+						transform.localScale = theScale;
+						flipped = true;
+					}
+					animator.Play ("PlayerIdleSouth");
+					break;
+				case Direction.North:
+					if (!flipped) {
+						theScale.x *= -1;
+						transform.localScale = theScale;
+						flipped = true;
+					}
+					animator.Play ("PlayerIdleWest");
+					break;
+				case Direction.South:
+					animator.Play ("PlayerIdleSouth");
+					break;
+				case Direction.West:
+					animator.Play ("PlayerIdleWest");
+					break;
+				default:
+					animator.Play ("PlayerIdleWest");
+					break;
+			}
+			
 		}
 	}
 }
