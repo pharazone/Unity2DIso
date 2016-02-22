@@ -7,6 +7,7 @@ public class MouseOverTile : MonoBehaviour {
 	private Renderer rend;
 	private Transform trans;
 	private GameObject border;
+	private GameObject border2;
 	private bool pathSet = false;
 	private List<ShortestPathStep> openSteps;
 	private List<ShortestPathStep> closedSteps;
@@ -17,6 +18,7 @@ public class MouseOverTile : MonoBehaviour {
 		// not sure if we need this
 		rend = GetComponent<Renderer> ();
 		border = GameObject.Find ("border");
+		border2 = GameObject.Find ("border2");
 		openSteps = new List<ShortestPathStep>();
 		closedSteps = new List<ShortestPathStep>();
 	}
@@ -124,7 +126,7 @@ public class MouseOverTile : MonoBehaviour {
 						Debug.Log ("SPS Count: " + GameManager.Instance.shortestPath.Count);
 						var gObj = sps.position.GetComponent<Transform>();
 						//storing the instantiate object as GameObject in clonedBorder and giving it a unique tag
-						var clonedBorder = Instantiate (border, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity) as GameObject;
+						var clonedBorder = Instantiate (border2, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity) as GameObject;
 						clonedBorder.tag = "clone";
 						clonedBorder.GetComponent<Renderer>().enabled = true;
 					}
@@ -223,6 +225,9 @@ public class MouseOverTile : MonoBehaviour {
 		//main border object gets repositioned and rendering turned off
 		border.GetComponent<Transform>().position = new Vector3 (0f,-1f,50f);
 		border.GetComponent<Renderer>().enabled = false;
+		
+		border2.GetComponent<Transform>().position = new Vector3 (0f,-1f,50f);
+		border2.GetComponent<Renderer>().enabled = false;
 	}
 	
 	
