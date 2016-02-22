@@ -26,14 +26,15 @@ public class MouseOverTile : MonoBehaviour {
 			
 			trans = GetComponent<Transform> ();
 
-			border.GetComponent<Transform> ().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
+			//border.GetComponent<Transform> ().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
 
 			openSteps.Clear ();
 			closedSteps.Clear ();
 			GameManager.Instance.shortestPath.Clear ();
-			ShowShortestPath ();
+			ShowMoveTiles();
+			ShowShortestPath (GameObject.Find ("AnimatedSprite").GetComponent<Unit>().moveDistance);
 		
-			border.GetComponent<Renderer> ().enabled = true;
+			//border.GetComponent<Renderer> ().enabled = true;
 		}
 	}
 
@@ -89,7 +90,7 @@ public class MouseOverTile : MonoBehaviour {
 		}
 	}
 	
-	void ShowShortestPath() {
+	void ShowShortestPath(int limit) {
 		// We only want to show the path on mouse hover. And only once. So reset this bool when mouse exits.
 		if (!pathSet) {
 			// Get the player's tile so we can calculate shortest path to mouse tile.
@@ -102,14 +103,16 @@ public class MouseOverTile : MonoBehaviour {
 			}
 			
 			InsertInOpenSteps(new ShortestPathStep(pTile));
+			int i = 0;
 			do {
+				i++;
 				ShortestPathStep currentStep = openSteps[0];
 				
 				closedSteps.Add(currentStep);
 				
 				openSteps.RemoveAt(0);
 				
-				if (currentStep.position == mTile) {
+				if (currentStep.position == mTile || i > limit) {
 					do {
 						if (currentStep.parent != null) {
 							GameManager.Instance.shortestPath.Add (currentStep);
@@ -118,6 +121,7 @@ public class MouseOverTile : MonoBehaviour {
 					} while (currentStep != null);
 					
 					foreach (ShortestPathStep sps in GameManager.Instance.shortestPath) {
+						Debug.Log ("SPS Count: " + GameManager.Instance.shortestPath.Count);
 						var gObj = sps.position.GetComponent<Transform>();
 						//storing the instantiate object as GameObject in clonedBorder and giving it a unique tag
 						var clonedBorder = Instantiate (border, new Vector3(gObj.position.x, gObj.position.y, gObj.position.z - 0.1f), Quaternion.identity) as GameObject;
@@ -172,8 +176,7 @@ public class MouseOverTile : MonoBehaviour {
 			
 			openSteps.Clear();
 			closedSteps.Clear();
-			GameManager.Instance.shortestPath.Clear();
-			
+
 			/*
 			foreach (Tile t in adjTiles) {
 				var gObj = t.GetComponent<Transform>();
@@ -192,7 +195,7 @@ public class MouseOverTile : MonoBehaviour {
 		int i = 0;
 
 		for (; i < count; i++) {
-			if (stepFScore < openSteps[i].Fscore()) {
+			if (stepFScore <= openSteps[i].Fscore()) {
 				break;
 			}
 		}

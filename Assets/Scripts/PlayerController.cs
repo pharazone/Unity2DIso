@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		currentTile = GetComponent<Tile>();
 		animator = GetComponent<Animator> ();
+		direction = Direction.West;
 	}
 
 	IEnumerator Walk() {
@@ -44,8 +45,6 @@ public class PlayerController : MonoBehaviour {
 				newPos, speed * Time.deltaTime);
 
 			if (moveTile.elevation > 0) {
-				animator.enabled = false;
-				animator.enabled = true;
 				animator.Play ("PlayerJumpingWest");
 			}
 
