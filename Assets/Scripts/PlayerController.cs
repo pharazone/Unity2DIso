@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
 				animator.Play ("PlayerJumpingWest");
 			}
 
-			Debug.Log (GetComponent<Tile> ().x + ", " + GetComponent<Tile> ().y + " -> " + moveTile.x + ", " + moveTile.y);
+			//Debug.Log (GetComponent<Tile> ().x + ", " + GetComponent<Tile> ().y + " -> " + moveTile.x + ", " + moveTile.y);
 			if (GetComponent<Tile>().x > moveTile.x) {
 				if (direction != Direction.West) {
 					if (flipped) {
@@ -112,7 +112,8 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		//Debug.Log ("State: " + GameManager.Instance.playerState);
+		//Debug.Log ("Size: " + GameManager.Instance.shortestPath.Count);
 		// Start walking.
 		if (GameManager.Instance.shortestPath.Count > 0
 		    && GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_WALKING) {

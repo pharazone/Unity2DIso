@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
 	private GameObject tileClicked;
 	public List<Tile> tiles;
 	public List<ShortestPathStep> shortestPath;
+	public Tile playerTile;
 
 	void Awake () {
 		if (Instance != null && Instance != this) {
@@ -75,6 +76,8 @@ public class GameManager : MonoBehaviour {
 		
 		return adjTiles;
 	}
+	
+	
 
 	public GameObject getTileClicked() {
 		return tileClicked;

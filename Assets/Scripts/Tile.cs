@@ -5,11 +5,19 @@ using System.Collections;
 public class Tile : MonoBehaviour {
 
 	public int x, y, elevation;
-	GameObject border;
+	public SpriteRenderer moveBorder;
+	public SpriteRenderer pathBorder;
 
 	// Use this for initialization
 	void Start () {
-		GameObject.Find("Border");
+		for (int i = 0; i < transform.childCount; i++) {
+			if (transform.GetChild (i).transform.name == "MoveBorder") {
+				moveBorder = transform.GetChild(i).transform.GetComponent<SpriteRenderer>();
+			}
+			if (transform.GetChild (i).transform.name == "PathBorder") {
+				pathBorder = transform.GetChild(i).transform.GetComponent<SpriteRenderer>();
+			}
+		}
 	}
 
 	// Update is called once per frame
