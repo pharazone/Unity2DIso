@@ -54,22 +54,22 @@ public class GameManager : MonoBehaviour {
 		Tile left = getTileAt(t.x + 1, t.y);
 		Tile right = getTileAt(t.x - 1, t.y);
 		
-		if (top != null) {
+		if (top != null && top.obstacle == null) {
 			//Debug.Log ("Found adjacent tile at " + top.x + ", " + top.y);
 			adjTiles.Add(top);
 		}
 		
-		if (bot != null) {
+		if (bot != null && bot.obstacle == null) {
 			//Debug.Log ("Foud adjacent tile at " + bot.x + ", " + bot.y);
 			adjTiles.Add (bot);
 		}
 		
-		if (left != null) {
+		if (left != null && left.obstacle == null) {
 			//Debug.Log ("Found adjacent tile at " + left.x + ", " + left.y);
 			adjTiles.Add (left);
 		}
 		
-		if (right != null) {
+		if (right != null && right.obstacle == null) {
 			//Debug.Log ("Found adjacent tile at " + right.x + ", " + right.y);
 			adjTiles.Add(right);
 		}

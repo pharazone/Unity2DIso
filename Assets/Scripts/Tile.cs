@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour {
 	public int x, y, elevation;
 	public SpriteRenderer moveBorder;
 	public SpriteRenderer pathBorder;
+	public GameObject obstacle;
 
 	// Use this for initialization
 	void Start () {
@@ -16,6 +17,9 @@ public class Tile : MonoBehaviour {
 			}
 			if (transform.GetChild (i).transform.name == "PathBorder") {
 				pathBorder = transform.GetChild(i).transform.GetComponent<SpriteRenderer>();
+			}
+			if (transform.GetChild (i).transform.name == "Obstacle") {
+				obstacle = transform.GetChild (i).gameObject;
 			}
 		}
 	}
