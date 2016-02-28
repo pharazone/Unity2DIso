@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour {
 		if (GameManager.Instance.shortestPath.Count > 0) {
 			walk = true;
 
-			Tile moveTile = GameManager.Instance.shortestPath [GameManager.Instance.shortestPath.Count - 1].position;
+			Tile moveTile = GameManager.Instance.shortestPath [GameManager.Instance.shortestPath.Count - 1];
 			GetComponent<Tile> ().elevation = moveTile.elevation + 1;
 
 			var newY = (moveTile.x + moveTile.y) / -4.0f;

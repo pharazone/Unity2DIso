@@ -27,7 +27,6 @@ public class MouseOverTile : MonoBehaviour {
 
 	void OnMouseEnter(){
 		if (GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_IDLE) {
-			
 			trans = GetComponent<Transform> ();
 
 			//border.GetComponent<Transform> ().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
@@ -42,10 +41,17 @@ public class MouseOverTile : MonoBehaviour {
 			Tile pTile = GameManager.Instance.getTileAt(animatedSprite.GetComponent<PlayerController>().currentTile.x,
 			                                            animatedSprite.GetComponent<PlayerController>().currentTile.y);
 			Tile mTile = GameManager.Instance.getTileAt(GetComponent<Tile>().x, GetComponent<Tile>().y);
-			
+
+
 			ShowMoveTiles(pTile, moveDistance);
 			var tiles = GetShortestPath(pTile, mTile, moveDistance);
-			
+
+			if (tiles.Count > moveDistance) {
+				tiles.RemoveRange (0, tiles.Count - moveDistance);
+			}
+
+			GameManager.Instance.shortestPath = tiles;
+
 			foreach (Tile t in tiles) {
 				t.pathBorder.enabled = true;
 			}
@@ -54,7 +60,6 @@ public class MouseOverTile : MonoBehaviour {
 
 	void OnMouseExit(){
 		RemoveIndicators();
-		pathSet = false;
 	}
 	
 	void OnMouseDown() {
@@ -111,7 +116,6 @@ public class MouseOverTile : MonoBehaviour {
 		var tiles = new List<Tile>();
 
 		if (from == to) {
-			pathSet = true;
 			return tiles;
 		}
 		
@@ -119,23 +123,24 @@ public class MouseOverTile : MonoBehaviour {
 		int i = 0;
 		do {
 			i++;
+
 			ShortestPathStep currentStep = openSteps[0];
 			
 			closedSteps.Add(currentStep);
 			
 			openSteps.RemoveAt(0);
 			
-			if (currentStep.position == to || (limit != -1 && i > limit)) {
+			if (currentStep.position == to /*|| (limit != -1 && i > limit)*/) {
 				do {
 					if (currentStep.parent != null) {
-						shortestPath.Add (currentStep);
+						shortestPath.Add(currentStep);
 					}
 					currentStep = currentStep.parent;
 				} while (currentStep != null);
-				
+
+
 				foreach (ShortestPathStep sps in shortestPath) {
 					tiles.Add(sps.position);
-					GameManager.Instance.shortestPath.Add (sps);
 				}
 				
 				openSteps.Clear();
@@ -153,6 +158,7 @@ public class MouseOverTile : MonoBehaviour {
 				foreach (ShortestPathStep cs in closedSteps) {
 					if (cs.position == step.position) {
 						inClosed = true;
+						break;
 					}
 				}
 				if (inClosed) {
@@ -172,22 +178,20 @@ public class MouseOverTile : MonoBehaviour {
 					step.parent = currentStep;
 					step.gScore = currentStep.gScore + moveCost;
 					step.hScore = ComputeHScore(step.position, to);
-					
+
 					InsertInOpenSteps(step);
 				}
 			}
 		} while (openSteps.Count > 0);
 		
 		if (shortestPath.Count == 0) {
-			Debug.Log("Could not find a path.");
+			//Debug.Log("Could not find a path.");
 		}
 		
 		openSteps.Clear();
 		closedSteps.Clear();
 		shortestPath.Clear ();
 
-		pathSet = true;
-		
 		return tiles;
 	}
 	

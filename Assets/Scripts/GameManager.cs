@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour {
 	public static GameManager Instance { get; private set; }
 	private GameObject tileClicked;
 	public List<Tile> tiles;
-	public List<ShortestPathStep> shortestPath;
+	public List<Tile> shortestPath;
 	public Tile playerTile;
 
 	void Awake () {
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 		}
 
 		playerState = PlayerState.PLAYER_IDLE;
-		shortestPath = new List<ShortestPathStep>();
+		shortestPath = new List<Tile>();
 
 		DontDestroyOnLoad (gameObject);
 	}
