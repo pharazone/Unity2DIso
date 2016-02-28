@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour {
 	public float speed = 1.0f;
 	public Tile currentTile;
 	public Animator animator;
-	private bool walk = false;
 	private bool flipped = false;
 
 	private enum Direction {
@@ -27,8 +26,6 @@ public class PlayerController : MonoBehaviour {
 
 	IEnumerator Walk() {
 		if (GameManager.Instance.shortestPath.Count > 0) {
-			walk = true;
-
 			Tile moveTile = GameManager.Instance.shortestPath [GameManager.Instance.shortestPath.Count - 1];
 			GetComponent<Tile> ().elevation = moveTile.elevation + 1;
 

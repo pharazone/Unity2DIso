@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public class MouseOverTile : MonoBehaviour {
 
-	private Renderer rend;
-	private Transform trans;
-	private GameObject border;
-	private GameObject border2;
-	private bool pathSet = false;
 	private List<ShortestPathStep> openSteps;
 	private List<ShortestPathStep> closedSteps;
 	private List<ShortestPathStep> shortestPath;
@@ -17,9 +12,6 @@ public class MouseOverTile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// not sure if we need this
-		rend = GetComponent<Renderer> ();
-		border = GameObject.Find ("border");
-		border2 = GameObject.Find ("border2");
 		openSteps = new List<ShortestPathStep>();
 		closedSteps = new List<ShortestPathStep>();
 		shortestPath = new List<ShortestPathStep>();
@@ -27,8 +19,6 @@ public class MouseOverTile : MonoBehaviour {
 
 	void OnMouseEnter(){
 		if (GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_IDLE) {
-			trans = GetComponent<Transform> ();
-
 			//border.GetComponent<Transform> ().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
 
 			openSteps.Clear ();

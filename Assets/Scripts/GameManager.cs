@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,12 +10,20 @@ public class GameManager : MonoBehaviour {
 		PLAYER_IDLE
 	}
 
+	public enum GameState {
+		PLAYER_TURN,
+		ENEMY_TURN
+	}
+
 	public PlayerState playerState;
+	public GameState gameState;
 	public static GameManager Instance { get; private set; }
 	private GameObject tileClicked;
 	public List<Tile> tiles;
 	public List<Tile> shortestPath;
 	public Tile playerTile;
+	private Text playerStateText;
+	private Text gameStateText;
 
 	void Awake () {
 		if (Instance != null && Instance != this) {
@@ -31,8 +40,10 @@ public class GameManager : MonoBehaviour {
 		}
 
 		playerState = PlayerState.PLAYER_IDLE;
+		gameState = GameState.PLAYER_TURN;
 		shortestPath = new List<Tile>();
-
+		playerStateText = GameObject.Find ("PlayerState").GetComponent<Text>();
+		gameStateText = GameObject.Find ("GameState").GetComponent<Text> ();
 		DontDestroyOnLoad (gameObject);
 	}
 	
@@ -85,5 +96,10 @@ public class GameManager : MonoBehaviour {
 
 	public void setTileClicked(GameObject tile) {
 		tileClicked = tile;
+	}
+
+	void Update() {
+		playerStateText.text = "Player State: " + playerState;
+		gameStateText.text = "Game State: " + gameState;
 	}
 }
