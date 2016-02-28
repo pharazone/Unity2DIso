@@ -99,11 +99,12 @@ public class PlayerController : MonoBehaviour {
 				GetComponent<Tile> ().x = moveTile.x;
 				GetComponent<Tile> ().y = moveTile.y;
 				GameManager.Instance.shortestPath.RemoveAt (GameManager.Instance.shortestPath.Count - 1);
+
 			}
 		} else {
 			GameManager.Instance.playerState = GameManager.PlayerState.PLAYER_IDLE;
 		}
-
+			
 		yield return true;
 	}
 	
