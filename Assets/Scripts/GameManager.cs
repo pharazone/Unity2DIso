@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public enum GameState {
+		MENU,
+		BATTLE,
+		CUT_SCENE,
 		PLAYER_TURN,
 		ENEMY_TURN
 	}
@@ -88,7 +91,9 @@ public class GameManager : MonoBehaviour {
 		return adjTiles;
 	}
 	
-	
+	public void SetGameState(GameState state) {
+		gameState = state;
+	}
 
 	public GameObject getTileClicked() {
 		return tileClicked;

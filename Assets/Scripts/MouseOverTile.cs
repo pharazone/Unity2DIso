@@ -18,7 +18,8 @@ public class MouseOverTile : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
-		if (GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_IDLE) {
+		if (GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_IDLE &&
+			GameManager.Instance.gameState == GameManager.GameState.PLAYER_TURN) {
 			//border.GetComponent<Transform> ().position = new Vector3 (trans.position.x, trans.position.y, trans.position.z - 0.1f);
 
 			openSteps.Clear ();

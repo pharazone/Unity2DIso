@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour {
 	public Tile currentTile;
 	public Animator animator;
 	private bool flipped = false;
+	private PlayerState playerState_;
+	private bool hasWalked = false;
 
 	private enum Direction {
 		North,
@@ -107,16 +109,28 @@ public class PlayerController : MonoBehaviour {
 			
 		yield return true;
 	}
-	
+
+	void handleInput() {
+		PlayerState state = playerState_.handleInput ();
+		if (state != null) {
+			playerState_ = state;
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
+		//handleInput ();
 		//Debug.Log ("State: " + GameManager.Instance.playerState);
 		//Debug.Log ("Size: " + GameManager.Instance.shortestPath.Count);
 		// Start walking.
 		if (GameManager.Instance.shortestPath.Count > 0
 		    && GameManager.Instance.playerState == GameManager.PlayerState.PLAYER_WALKING) {
 			StartCoroutine (Walk ());
+			hasWalked = true;
 		} else {
+			if (hasWalked) {
+				GameManager.Instance.SetGameState (GameManager.GameState.ENEMY_TURN);
+			}
 			GameManager.Instance.playerState = GameManager.PlayerState.PLAYER_IDLE;
 			Vector3 theScale = transform.localScale;
 			switch (direction) {
